@@ -1,0 +1,44 @@
+Post Managing
+- User
+- Post
+- Categories
+- Comment
+- Like
+
+User Roles:
+- Admin
+- Sub-Admin
+- Editor
+- User
+
+Persmission Apply:
+- User, Post, Categories, Comment, Like
+
+Admin:
+- All route can be access
+- Admin can perform CRUD operation on Persmission
+- CRUD on user with thier role(sub_admin,editor,user)
+- Admin can add/delete/update the persmission to all
+  section(User Persmission, Post Categories, Comment, Like)
+- CRUD on Post, Categories, Comment, Like
+
+Sub-Admin
+- Sub Admin can access to all routed but not Admin route
+- Sub Admin can add/delete/update the persmission to all
+  if he have persmission from the Admin User.
+- CRUD on User wtih their roles(editor, user) and 
+  persmission but not to self.
+- CRUD on Post, Categories, Comments and Likes if he
+  has persmission from the Admin User.
+
+Editor
+- The editor can access to all route but not Admin and Sub-Admin route
+- The editor can perform CRUD on Post, Categories,
+  Comments, and Likes if he has persmission from the 
+  Admin or Sub-Admin
+
+User:
+- Users can register and login
+- User can see the Post
+- Comment and Like are default enable for normal
+  users, but the Admin ans Sub-Admin can block their comment and like feature.
