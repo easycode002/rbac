@@ -9,7 +9,9 @@ app.use(express.json());
 app.use(express.static("./public"));
 
 const authRoute = require("./routes/auth.route");
+const adminRoute = require("./routes/admin.route");
 app.use("/api/v1", authRoute);
+app.use("/api/v1", adminRoute);
 
 const port = process.env.PORT || 4000;
 
