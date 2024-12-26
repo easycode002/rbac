@@ -5,3 +5,6 @@ bun add express mongoose dotenv body-parser
     None
 # Video03
 bun add bcrypt express-validator
+
+# Video04
+bun add jsonwebtoken
