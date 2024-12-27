@@ -14,7 +14,12 @@ const createPermission = async (req, res) => {
 
     const { permission_name } = req.body;
 
-    const isExist = await PermissionModal.findOne({ permission_name });
+    const isExist = await PermissionModal.findOne({
+      permission_name: {
+        $regex: permission_name,
+        $options: "i",
+      },
+    });
     if (isExist) {
       return res.status(400).json({
         success: false,
@@ -114,7 +119,10 @@ const updatePermission = async (req, res) => {
     // Step 4: Make sure permission name is no duplicate
     const isNameAssigned = await PermissionModal.findOne({
       _id: { $ne: id },
-      permission_name,
+      permission_name: {
+        $regex: permission_name,
+        $options: "i",
+      },
     });
     if (isNameAssigned) {
       return res.status(400).json({

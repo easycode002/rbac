@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: Number,// 0=Normal User, 1=Admin, 2=Sub-Admin, 3=Editor, 4=
-    default:0
+    type: Number,// 0=Normal User, 1=Admin, 2=Sub-Admin, 3=Editor
+    default:1
   },
 });
 
