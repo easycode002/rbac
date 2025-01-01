@@ -7,7 +7,7 @@ const permissionSchema = new mongoose.Schema({
   },
   is_default: {
     type: Number,
-    default: 0, //0=not default, 1=default
+    default: 1, //0=not default, 1=default
   },
 });
 

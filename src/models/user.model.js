@@ -15,9 +15,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: Number,// 0=Normal User, 1=Admin, 2=Sub-Admin, 3=Editor
-    default:1
+    default:0
   },
 });
-
 
 module.exports = mongoose.model('User',userSchema);

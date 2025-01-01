@@ -8,3 +8,12 @@ bun add bcrypt express-validator
 
 # Video04
 bun add jsonwebtoken
+
+
+bun add randomstring
+
+Permission list
+User:: Post, Comment, Like
+ 
+    - Admin can::: create, update, assign role and permission to user
+    - One role(in role can have multi permission)

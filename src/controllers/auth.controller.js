@@ -1,4 +1,7 @@
 const UserModel = require("../models/user.model");
+const UserPermissionModel = require("../models/userpermission.model");
+const Permission = require("../models/permission.model");
+
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -35,6 +38,23 @@ const registerUser = async (req, res) => {
 
     // Save new user
     const userData = newUser.save();
+
+    // Assing defautl permission
+    const defaultPermission = await Permission.find({ is_default: 1 });
+
+    if (defaultPermission.length > 0) {
+      const permissionArray = defaultPermission.map((permission) => ({
+        permission_name: permission.permission_name,
+        permission_value: [0, 1, 2, 3], // All CRUD operations
+      }));
+
+      const userPermission = new UserPermissionModel({
+        user_id: (await userData)._id,
+        permission: permissionArray,
+      });
+
+      await userPermission.save();
+    }
 
     return res.status(200).json({
       success: true,
@@ -90,12 +110,52 @@ const loginUser = async (req, res) => {
     // Generate new access token
     const accessToken = await generateAccessToken({ user: userData });
 
+    // Get user data with all permission
+    const result = await UserModel.aggregate([
+      {
+        $match: {
+          email: userData.email,
+        },
+      },
+      {
+        $lookup: {
+          from: "userpermissions",
+          localField: "_id",
+          foreignField: "user_id",
+          as: "permissions",
+        },
+      },
+      {
+        $project: {
+          // _id: 0,
+          _id: 1,
+          name: 1,
+          email: 1,
+          role: 1,
+          permissions: {
+            $cond: {
+              if: { $isArray: "$permissions" },
+              then: { $arrayElemAt: ["$permissions", 0] },
+              else: null,
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          permissions: {
+            permissions: "$permissions.permissions",
+          },
+        },
+      },
+    ]);
+
     return res.status(400).json({
       success: true,
       msg: "Login successfully!",
       accessToken: accessToken,
       tokenType: "Bearer",
-      data: userData,
+      data: result[0],
     });
   } catch (error) {
     return res.status(400).json({
@@ -112,7 +172,7 @@ const getProfile = async (req, res) => {
     return res.status(200).json({
       success: true,
       msg: "Profile data!",
-      data:userData
+      data: userData,
     });
   } catch (error) {
     return res.status(400).json({
